@@ -127,6 +127,34 @@ export const BuildHTTPRoute = (
 };
 
 /**
+ * Build a new Web Socket route
+ */
+export const BuildWebSocketRoute = (
+  hasDefaultRouteResponse = true,
+  options: {
+    endpoint: typeof RouteDefault.endpoint;
+    body: typeof RouteResponseDefault.body;
+  } = {
+    endpoint: RouteDefault.endpoint,
+    body: RouteResponseDefault.body
+  }
+): Route => {
+  const defaultResponse = {
+    ...BuildRouteResponse(),
+    default: true,
+    body: options.body
+  };
+
+  return {
+    ...RouteDefault,
+    type: RouteType.WS,
+    method: Methods.get,
+    endpoint: options.endpoint,
+    responses: hasDefaultRouteResponse ? [defaultResponse] : []
+  };
+};
+
+/**
  * Build a new CRUD route
  */
 export const BuildCRUDRoute = (

@@ -30,6 +30,9 @@
             <button class="btn dropdown-item" (click)="addHTTPRoute()">
               <app-svg icon="endpoint" class="me-1"></app-svg> HTTP route
             </button>
+            <button class="btn dropdown-item" (click)="addWebSocketRoute()">
+              <app-svg icon="websocket" class="me-1"></app-svg> WebSocket
+            </button>
             <button class="btn dropdown-item" (click)="addFolder()">
               <app-svg icon="folder" class="me-1"></app-svg> Folder
             </button>
@@ -271,6 +274,13 @@
               <app-svg icon="low_priority"></app-svg>
             </div>
             <div
+              *ngIf="route.type === 'ws'"
+              class="text-primary pe-2 d-flex align-items-center"
+              ngbTooltip="WebSocket Route"
+            >
+              <app-svg icon="websocket"></app-svg>
+            </div>
+            <div
               *ngIf="settings$ | async as settings"
               class="nav-link-label"
               [ngClass]="{
@@ -289,6 +299,7 @@
             </div>
             <div class="ms-auto ps-2 d-flex align-items-center">
               <span
+                *ngIf="route.type !== 'ws'"
                 class="badge badge-default route-badge-{{
                   route.type === 'crud' ? 'crud' : route.method
                 }}"

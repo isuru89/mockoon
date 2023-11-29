@@ -90,6 +90,9 @@ export class SvgComponent {
     | 'data'
     | 'low_priority'
     | 'command_palette'
+    | 'websocket'
+    | 'broadcast'
+    | 'events'
     | string;
 
   constructor() {}

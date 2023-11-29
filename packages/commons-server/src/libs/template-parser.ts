@@ -1,11 +1,19 @@
 import { Environment, ProcessedDatabucket } from '@mockoon/commons';
 import { Request, Response } from 'express';
 import { compile as hbsCompile } from 'handlebars';
+import { IncomingMessage } from 'http';
+import { RawData } from 'ws';
 import { DataHelpers } from './templating-helpers/data-helpers';
 import { FakerWrapper } from './templating-helpers/faker-wrapper';
 import { Helpers } from './templating-helpers/helpers';
 import { RequestHelpers } from './templating-helpers/request-helpers';
 import { ResponseHelpers } from './templating-helpers/response-helpers';
+import { WebSocketHelpers } from './templating-helpers/web-socket-helpers';
+
+export type WebSocketRequest = {
+  message?: RawData;
+  request: IncomingMessage;
+};
 
 /**
  * Parse a content with Handlebars
@@ -21,7 +29,8 @@ export const TemplateParser = function (
   environment: Environment,
   processedDatabuckets: ProcessedDatabucket[],
   request?: Request,
-  response?: Response
+  response?: Response,
+  websocketRequest?: WebSocketRequest
 ): string {
   let helpers = {
     ...FakerWrapper,
@@ -39,6 +48,17 @@ export const TemplateParser = function (
     helpers = {
       ...helpers,
       ...RequestHelpers(request, environment)
+    };
+  }
+
+  if (websocketRequest) {
+    helpers = {
+      ...helpers,
+      ...WebSocketHelpers(
+        websocketRequest.request,
+        websocketRequest.message,
+        environment
+      )
     };
   }
 

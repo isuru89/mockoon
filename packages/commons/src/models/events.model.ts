@@ -16,4 +16,15 @@ export type ServerEvents = {
   'entering-request': () => void;
   'callback-invoked': (callback: InvokedCallback) => void;
   'transaction-complete': (transaction: Transaction) => void;
+
+  /**
+   * Web socket related events
+   */
+  'ws-new-connection': (websocketId: string) => void;
+  'ws-closed': (
+    websocketId: string,
+    wsCode: number,
+    reason?: string | null
+  ) => void;
+  'ws-message-received': (websocketId: string) => void;
 };

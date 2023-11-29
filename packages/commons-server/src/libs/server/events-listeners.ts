@@ -74,6 +74,9 @@ export const listenServerEvents = function (
       case 'HEADER_PARSING_ERROR':
       case 'CALLBACK_ERROR':
       case 'CALLBACK_FILE_ERROR':
+      case 'WS_SERVING_ERROR':
+      case 'WS_UNKNOWN_ROUTE':
+      case 'WS_UNSUPPORTED_CONTENT':
         message = format(ServerMessages[errorCode], error?.message || '');
         break;
       case 'CERT_FILE_NOT_FOUND':
@@ -143,5 +146,25 @@ export const listenServerEvents = function (
       );
     }
     logger.info('Callback invoked', logMeta);
+  });
+
+  server.on('ws-new-connection', (websockerId) => {
+    logger.info('WebSocket New Connection', { ...defaultLogMeta, websockerId });
+  });
+
+  server.on('ws-message-received', (websockerId) => {
+    logger.info('WebSocket Message Recieved', {
+      ...defaultLogMeta,
+      websockerId
+    });
+  });
+
+  server.on('ws-closed', (websockerId, code, reason) => {
+    logger.info('WebSocket Closed', {
+      ...defaultLogMeta,
+      websockerId,
+      code,
+      reason
+    });
   });
 };

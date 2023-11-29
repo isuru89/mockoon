@@ -10,6 +10,7 @@ import {
   BuildHeader,
   BuildHTTPRoute,
   BuildRouteResponse,
+  BuildWebSocketRoute,
   Callback,
   CloneCallback,
   CloneDataBucket,
@@ -758,6 +759,37 @@ export class EnvironmentsService extends Logger {
   }
 
   /**
+   * Add a new HTTP route and save it in the store
+   */
+  public addWebSocketRoute(
+    folderId: string | 'root',
+    options: {
+      endpoint: typeof RouteDefault.endpoint;
+      body: typeof RouteResponseDefault.body;
+    } = {
+      endpoint: RouteDefault.endpoint,
+      body: RouteResponseDefault.body
+    }
+  ) {
+    const activeEnvironment = this.store.getActiveEnvironment();
+
+    if (activeEnvironment) {
+      this.store.update(
+        addRouteAction(
+          activeEnvironment.uuid,
+          BuildWebSocketRoute(true, options),
+          folderId,
+          true
+        )
+      );
+
+      setTimeout(() => {
+        this.uiService.focusInput(FocusableInputs.ROUTE_PATH);
+      }, 0);
+    }
+  }
+
+  /**
    * Add a new CRUD route and save it in the store
    */
   public addCRUDRoute(
@@ -1108,7 +1140,8 @@ export class EnvironmentsService extends Logger {
 
     // we shouldn't be able to remove the last route response
     if (
-      (activeRoute.type === RouteType.HTTP &&
+      ((activeRoute.type === RouteType.HTTP ||
+        activeRoute.type === RouteType.WS) &&
         activeRoute.responses.length > 1) ||
       (activeRoute.type === RouteType.CRUD &&
         !activeRouteResponse.default &&
