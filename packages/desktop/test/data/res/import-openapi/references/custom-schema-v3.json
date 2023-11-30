@@ -1,6 +1,6 @@
 {
   "uuid": "61d19605-d609-4497-a951-0a2739409f88",
-  "lastMigration": 32,
+  "lastMigration": 33,
   "name": "Sample v3 schema",
   "endpointPrefix": "api",
   "latency": 0,
@@ -33,7 +33,9 @@
         }
       ],
       "responseMode": null,
-      "type": "http"
+      "type": "http",
+      "streamingMode": null,
+      "streamingInterval": 0
     },
     {
       "uuid": "cfc32539-eee6-4b85-800c-ae0357457d13",
@@ -62,7 +64,9 @@
         }
       ],
       "responseMode": null,
-      "type": "http"
+      "type": "http",
+      "streamingMode": null,
+      "streamingInterval": 0
     },
     {
       "uuid": "391b7684-7cdb-4c68-b32b-1a3d6930574a",
@@ -96,7 +100,9 @@
         }
       ],
       "responseMode": null,
-      "type": "http"
+      "type": "http",
+      "streamingMode": null,
+      "streamingInterval": 0
     }
   ],
   "proxyMode": false,

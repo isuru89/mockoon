@@ -1,6 +1,6 @@
 {
   "uuid": "b8701e60-e7d4-11ea-a5ec-979674ac1a4b",
-  "lastMigration": 32,
+  "lastMigration": 33,
   "name": "Regulations.gov",
   "endpointPrefix": "regulations/v3",
   "latency": 0,
@@ -71,7 +71,9 @@
         }
       ],
       "responseMode": null,
-      "type": "http"
+      "type": "http",
+      "streamingMode": null,
+      "streamingInterval": 0
     },
     {
       "uuid": "b8701e68-e7d4-11ea-a5ec-979674ac1a4b",
@@ -138,7 +140,9 @@
         }
       ],
       "responseMode": null,
-      "type": "http"
+      "type": "http",
+      "streamingMode": null,
+      "streamingInterval": 0
     },
     {
       "uuid": "b8701e6c-e7d4-11ea-a5ec-979674ac1a4b",
@@ -205,7 +209,9 @@
         }
       ],
       "responseMode": null,
-      "type": "http"
+      "type": "http",
+      "streamingMode": null,
+      "streamingInterval": 0
     }
   ],
   "proxyMode": false,

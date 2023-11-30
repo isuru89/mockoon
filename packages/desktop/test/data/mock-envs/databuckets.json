@@ -1,6 +1,6 @@
 {
   "uuid": "5dd5c15a-d860-40da-83f4-7606e2c0ee22",
-  "lastMigration": 32,
+  "lastMigration": 33,
   "name": "databuckets",
   "endpointPrefix": "",
   "latency": 0,
@@ -33,7 +33,9 @@
         }
       ],
       "responseMode": null,
-      "type": "http"
+      "type": "http",
+      "streamingMode": null,
+      "streamingInterval": 0
     },
     {
       "uuid": "38b3f518-ade3-4503-b073-bbdb4d6e1511",
@@ -62,7 +64,9 @@
         }
       ],
       "responseMode": null,
-      "type": "http"
+      "type": "http",
+      "streamingMode": null,
+      "streamingInterval": 0
     },
     {
       "uuid": "cf3b141e-ddc7-41e3-89b9-8ef6a0e64400",
@@ -91,7 +95,9 @@
         }
       ],
       "responseMode": null,
-      "type": "http"
+      "type": "http",
+      "streamingMode": null,
+      "streamingInterval": 0
     }
   ],
   "proxyMode": false,

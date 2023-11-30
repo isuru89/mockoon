@@ -1,6 +1,6 @@
 {
   "uuid": "f98d4710-e7d4-11ea-a5ec-979674ac1a4b",
-  "lastMigration": 32,
+  "lastMigration": 33,
   "name": "Shutterstock API Explorer",
   "endpointPrefix": "",
   "latency": 0,
@@ -90,7 +90,9 @@
         }
       ],
       "responseMode": null,
-      "type": "http"
+      "type": "http",
+      "streamingMode": null,
+      "streamingInterval": 0
     },
     {
       "uuid": "f98d471a-e7d4-11ea-a5ec-979674ac1a4b",
@@ -176,7 +178,9 @@
         }
       ],
       "responseMode": null,
-      "type": "http"
+      "type": "http",
+      "streamingMode": null,
+      "streamingInterval": 0
     },
     {
       "uuid": "f98d4720-e7d4-11ea-a5ec-979674ac1a4b",
@@ -281,7 +285,9 @@
         }
       ],
       "responseMode": null,
-      "type": "http"
+      "type": "http",
+      "streamingMode": null,
+      "streamingInterval": 0
     },
     {
       "uuid": "f98d4726-e7d4-11ea-a5ec-979674ac1a4b",
@@ -386,7 +392,9 @@
         }
       ],
       "responseMode": null,
-      "type": "http"
+      "type": "http",
+      "streamingMode": null,
+      "streamingInterval": 0
     },
     {
       "uuid": "f98d472c-e7d4-11ea-a5ec-979674ac1a4b",
@@ -491,7 +499,9 @@
         }
       ],
       "responseMode": null,
-      "type": "http"
+      "type": "http",
+      "streamingMode": null,
+      "streamingInterval": 0
     },
     {
       "uuid": "f98d4732-e7d4-11ea-a5ec-979674ac1a4b",
@@ -596,7 +606,9 @@
         }
       ],
       "responseMode": null,
-      "type": "http"
+      "type": "http",
+      "streamingMode": null,
+      "streamingInterval": 0
     },
     {
       "uuid": "f98d4738-e7d4-11ea-a5ec-979674ac1a4b",
@@ -701,7 +713,9 @@
         }
       ],
       "responseMode": null,
-      "type": "http"
+      "type": "http",
+      "streamingMode": null,
+      "streamingInterval": 0
     },
     {
       "uuid": "f98d473d-e7d4-11ea-a5ec-979674ac1a4b",
@@ -787,7 +801,9 @@
         }
       ],
       "responseMode": null,
-      "type": "http"
+      "type": "http",
+      "streamingMode": null,
+      "streamingInterval": 0
     },
     {
       "uuid": "f98d4743-e7d4-11ea-a5ec-979674ac1a4b",
@@ -892,7 +908,9 @@
         }
       ],
       "responseMode": null,
-      "type": "http"
+      "type": "http",
+      "streamingMode": null,
+      "streamingInterval": 0
     },
     {
       "uuid": "f98d6e21-e7d4-11ea-a5ec-979674ac1a4b",
@@ -921,7 +939,9 @@
         }
       ],
       "responseMode": null,
-      "type": "http"
+      "type": "http",
+      "streamingMode": null,
+      "streamingInterval": 0
     },
     {
       "uuid": "f98d6e23-e7d4-11ea-a5ec-979674ac1a4b",
@@ -950,7 +970,9 @@
         }
       ],
       "responseMode": null,
-      "type": "http"
+      "type": "http",
+      "streamingMode": null,
+      "streamingInterval": 0
     },
     {
       "uuid": "f98d6e28-e7d4-11ea-a5ec-979674ac1a4b",
@@ -1036,7 +1058,9 @@
         }
       ],
       "responseMode": null,
-      "type": "http"
+      "type": "http",
+      "streamingMode": null,
+      "streamingInterval": 0
     },
     {
       "uuid": "f98d6e2d-e7d4-11ea-a5ec-979674ac1a4b",
@@ -1122,7 +1146,9 @@
         }
       ],
       "responseMode": null,
-      "type": "http"
+      "type": "http",
+      "streamingMode": null,
+      "streamingInterval": 0
     },
     {
       "uuid": "f98d6e32-e7d4-11ea-a5ec-979674ac1a4b",
@@ -1208,7 +1234,9 @@
         }
       ],
       "responseMode": null,
-      "type": "http"
+      "type": "http",
+      "streamingMode": null,
+      "streamingInterval": 0
     },
     {
       "uuid": "f98d6e34-e7d4-11ea-a5ec-979674ac1a4b",
@@ -1237,7 +1265,9 @@
         }
       ],
       "responseMode": null,
-      "type": "http"
+      "type": "http",
+      "streamingMode": null,
+      "streamingInterval": 0
     },
     {
       "uuid": "f98d6e39-e7d4-11ea-a5ec-979674ac1a4b",
@@ -1323,7 +1353,9 @@
         }
       ],
       "responseMode": null,
-      "type": "http"
+      "type": "http",
+      "streamingMode": null,
+      "streamingInterval": 0
     },
     {
       "uuid": "f98d6e3e-e7d4-11ea-a5ec-979674ac1a4b",
@@ -1409,7 +1441,9 @@
         }
       ],
       "responseMode": null,
-      "type": "http"
+      "type": "http",
+      "streamingMode": null,
+      "streamingInterval": 0
     },
     {
       "uuid": "f98d6e43-e7d4-11ea-a5ec-979674ac1a4b",
@@ -1495,7 +1529,9 @@
         }
       ],
       "responseMode": null,
-      "type": "http"
+      "type": "http",
+      "streamingMode": null,
+      "streamingInterval": 0
     },
     {
       "uuid": "f98d6e48-e7d4-11ea-a5ec-979674ac1a4b",
@@ -1581,7 +1617,9 @@
         }
       ],
       "responseMode": null,
-      "type": "http"
+      "type": "http",
+      "streamingMode": null,
+      "streamingInterval": 0
     },
     {
       "uuid": "f98d6e4e-e7d4-11ea-a5ec-979674ac1a4b",
@@ -1686,7 +1724,9 @@
         }
       ],
       "responseMode": null,
-      "type": "http"
+      "type": "http",
+      "streamingMode": null,
+      "streamingInterval": 0
     },
     {
       "uuid": "f98d6e54-e7d4-11ea-a5ec-979674ac1a4b",
@@ -1791,7 +1831,9 @@
         }
       ],
       "responseMode": null,
-      "type": "http"
+      "type": "http",
+      "streamingMode": null,
+      "streamingInterval": 0
     },
     {
       "uuid": "f98d6e5a-e7d4-11ea-a5ec-979674ac1a4b",
@@ -1896,7 +1938,9 @@
         }
       ],
       "responseMode": null,
-      "type": "http"
+      "type": "http",
+      "streamingMode": null,
+      "streamingInterval": 0
     },
     {
       "uuid": "f98d6e61-e7d4-11ea-a5ec-979674ac1a4b",
@@ -2020,7 +2064,9 @@
         }
       ],
       "responseMode": null,
-      "type": "http"
+      "type": "http",
+      "streamingMode": null,
+      "streamingInterval": 0
     },
     {
       "uuid": "f98dbc43-e7d4-11ea-a5ec-979674ac1a4b",
@@ -2106,7 +2152,9 @@
         }
       ],
       "responseMode": null,
-      "type": "http"
+      "type": "http",
+      "streamingMode": null,
+      "streamingInterval": 0
     },
     {
       "uuid": "f98dbc48-e7d4-11ea-a5ec-979674ac1a4b",
@@ -2192,7 +2240,9 @@
         }
       ],
       "responseMode": null,
-      "type": "http"
+      "type": "http",
+      "streamingMode": null,
+      "streamingInterval": 0
     },
     {
       "uuid": "f98dbc4e-e7d4-11ea-a5ec-979674ac1a4b",
@@ -2297,7 +2347,9 @@
         }
       ],
       "responseMode": null,
-      "type": "http"
+      "type": "http",
+      "streamingMode": null,
+      "streamingInterval": 0
     },
     {
       "uuid": "f98dbc54-e7d4-11ea-a5ec-979674ac1a4b",
@@ -2402,7 +2454,9 @@
         }
       ],
       "responseMode": null,
-      "type": "http"
+      "type": "http",
+      "streamingMode": null,
+      "streamingInterval": 0
     },
     {
       "uuid": "f98dbc5a-e7d4-11ea-a5ec-979674ac1a4b",
@@ -2507,7 +2561,9 @@
         }
       ],
       "responseMode": null,
-      "type": "http"
+      "type": "http",
+      "streamingMode": null,
+      "streamingInterval": 0
     },
     {
       "uuid": "f98de353-e7d4-11ea-a5ec-979674ac1a4b",
@@ -2612,7 +2668,9 @@
         }
       ],
       "responseMode": null,
-      "type": "http"
+      "type": "http",
+      "streamingMode": null,
+      "streamingInterval": 0
     },
     {
       "uuid": "f98de359-e7d4-11ea-a5ec-979674ac1a4b",
@@ -2717,7 +2775,9 @@
         }
       ],
       "responseMode": null,
-      "type": "http"
+      "type": "http",
+      "streamingMode": null,
+      "streamingInterval": 0
     },
     {
       "uuid": "f98de35f-e7d4-11ea-a5ec-979674ac1a4b",
@@ -2822,7 +2882,9 @@
         }
       ],
       "responseMode": null,
-      "type": "http"
+      "type": "http",
+      "streamingMode": null,
+      "streamingInterval": 0
     },
     {
       "uuid": "f98de364-e7d4-11ea-a5ec-979674ac1a4b",
@@ -2908,7 +2970,9 @@
         }
       ],
       "responseMode": null,
-      "type": "http"
+      "type": "http",
+      "streamingMode": null,
+      "streamingInterval": 0
     },
     {
       "uuid": "f98de36a-e7d4-11ea-a5ec-979674ac1a4b",
@@ -3013,7 +3077,9 @@
         }
       ],
       "responseMode": null,
-      "type": "http"
+      "type": "http",
+      "streamingMode": null,
+      "streamingInterval": 0
     },
     {
       "uuid": "f98e0a63-e7d4-11ea-a5ec-979674ac1a4b",
@@ -3099,7 +3165,9 @@
         }
       ],
       "responseMode": null,
-      "type": "http"
+      "type": "http",
+      "streamingMode": null,
+      "streamingInterval": 0
     },
     {
       "uuid": "f98e0a68-e7d4-11ea-a5ec-979674ac1a4b",
@@ -3185,7 +3253,9 @@
         }
       ],
       "responseMode": null,
-      "type": "http"
+      "type": "http",
+      "streamingMode": null,
+      "streamingInterval": 0
     },
     {
       "uuid": "f98e0a6e-e7d4-11ea-a5ec-979674ac1a4b",
@@ -3290,7 +3360,9 @@
         }
       ],
       "responseMode": null,
-      "type": "http"
+      "type": "http",
+      "streamingMode": null,
+      "streamingInterval": 0
     },
     {
       "uuid": "f98e0a73-e7d4-11ea-a5ec-979674ac1a4b",
@@ -3376,7 +3448,9 @@
         }
       ],
       "responseMode": null,
-      "type": "http"
+      "type": "http",
+      "streamingMode": null,
+      "streamingInterval": 0
     },
     {
       "uuid": "f98e0a79-e7d4-11ea-a5ec-979674ac1a4b",
@@ -3481,7 +3555,9 @@
         }
       ],
       "responseMode": null,
-      "type": "http"
+      "type": "http",
+      "streamingMode": null,
+      "streamingInterval": 0
     },
     {
       "uuid": "f98e0a7f-e7d4-11ea-a5ec-979674ac1a4b",
@@ -3586,7 +3662,9 @@
         }
       ],
       "responseMode": null,
-      "type": "http"
+      "type": "http",
+      "streamingMode": null,
+      "streamingInterval": 0
     },
     {
       "uuid": "f98e0a85-e7d4-11ea-a5ec-979674ac1a4b",
@@ -3691,7 +3769,9 @@
         }
       ],
       "responseMode": null,
-      "type": "http"
+      "type": "http",
+      "streamingMode": null,
+      "streamingInterval": 0
     },
     {
       "uuid": "f98e0a8a-e7d4-11ea-a5ec-979674ac1a4b",
@@ -3777,7 +3857,9 @@
         }
       ],
       "responseMode": null,
-      "type": "http"
+      "type": "http",
+      "streamingMode": null,
+      "streamingInterval": 0
     },
     {
       "uuid": "f98e0a90-e7d4-11ea-a5ec-979674ac1a4b",
@@ -3882,7 +3964,9 @@
         }
       ],
       "responseMode": null,
-      "type": "http"
+      "type": "http",
+      "streamingMode": null,
+      "streamingInterval": 0
     },
     {
       "uuid": "f98e0a96-e7d4-11ea-a5ec-979674ac1a4b",
@@ -3987,7 +4071,9 @@
         }
       ],
       "responseMode": null,
-      "type": "http"
+      "type": "http",
+      "streamingMode": null,
+      "streamingInterval": 0
     },
     {
       "uuid": "f98e0a9b-e7d4-11ea-a5ec-979674ac1a4b",
@@ -4073,7 +4159,9 @@
         }
       ],
       "responseMode": null,
-      "type": "http"
+      "type": "http",
+      "streamingMode": null,
+      "streamingInterval": 0
     },
     {
       "uuid": "f98e0aa1-e7d4-11ea-a5ec-979674ac1a4b",
@@ -4178,7 +4266,9 @@
         }
       ],
       "responseMode": null,
-      "type": "http"
+      "type": "http",
+      "streamingMode": null,
+      "streamingInterval": 0
     },
     {
       "uuid": "f98e0aa6-e7d4-11ea-a5ec-979674ac1a4b",
@@ -4264,7 +4354,9 @@
         }
       ],
       "responseMode": null,
-      "type": "http"
+      "type": "http",
+      "streamingMode": null,
+      "streamingInterval": 0
     },
     {
       "uuid": "f98e0aab-e7d4-11ea-a5ec-979674ac1a4b",
@@ -4350,7 +4442,9 @@
         }
       ],
       "responseMode": null,
-      "type": "http"
+      "type": "http",
+      "streamingMode": null,
+      "streamingInterval": 0
     },
     {
       "uuid": "f98e0ab0-e7d4-11ea-a5ec-979674ac1a4b",
@@ -4436,7 +4530,9 @@
         }
       ],
       "responseMode": null,
-      "type": "http"
+      "type": "http",
+      "streamingMode": null,
+      "streamingInterval": 0
     },
     {
       "uuid": "f98e0ab5-e7d4-11ea-a5ec-979674ac1a4b",
@@ -4522,7 +4618,9 @@
         }
       ],
       "responseMode": null,
-      "type": "http"
+      "type": "http",
+      "streamingMode": null,
+      "streamingInterval": 0
     },
     {
       "uuid": "f98e3173-e7d4-11ea-a5ec-979674ac1a4b",
@@ -4608,7 +4706,9 @@
         }
       ],
       "responseMode": null,
-      "type": "http"
+      "type": "http",
+      "streamingMode": null,
+      "streamingInterval": 0
     },
     {
       "uuid": "f98e3175-e7d4-11ea-a5ec-979674ac1a4b",
@@ -4637,7 +4737,9 @@
         }
       ],
       "responseMode": null,
-      "type": "http"
+      "type": "http",
+      "streamingMode": null,
+      "streamingInterval": 0
     },
     {
       "uuid": "f98e317a-e7d4-11ea-a5ec-979674ac1a4b",
@@ -4723,7 +4825,9 @@
         }
       ],
       "responseMode": null,
-      "type": "http"
+      "type": "http",
+      "streamingMode": null,
+      "streamingInterval": 0
     },
     {
       "uuid": "f98e5883-e7d4-11ea-a5ec-979674ac1a4b",
@@ -4809,7 +4913,9 @@
         }
       ],
       "responseMode": null,
-      "type": "http"
+      "type": "http",
+      "streamingMode": null,
+      "streamingInterval": 0
     },
     {
       "uuid": "f98e5888-e7d4-11ea-a5ec-979674ac1a4b",
@@ -4895,7 +5001,9 @@
         }
       ],
       "responseMode": null,
-      "type": "http"
+      "type": "http",
+      "streamingMode": null,
+      "streamingInterval": 0
     },
     {
       "uuid": "f98e588e-e7d4-11ea-a5ec-979674ac1a4b",
@@ -5000,7 +5108,9 @@
         }
       ],
       "responseMode": null,
-      "type": "http"
+      "type": "http",
+      "streamingMode": null,
+      "streamingInterval": 0
     },
     {
       "uuid": "f98e5893-e7d4-11ea-a5ec-979674ac1a4b",
@@ -5086,7 +5196,9 @@
         }
       ],
       "responseMode": null,
-      "type": "http"
+      "type": "http",
+      "streamingMode": null,
+      "streamingInterval": 0
     },
     {
       "uuid": "f98e5898-e7d4-11ea-a5ec-979674ac1a4b",
@@ -5172,7 +5284,9 @@
         }
       ],
       "responseMode": null,
-      "type": "http"
+      "type": "http",
+      "streamingMode": null,
+      "streamingInterval": 0
     },
     {
       "uuid": "f98e589d-e7d4-11ea-a5ec-979674ac1a4b",
@@ -5258,7 +5372,9 @@
         }
       ],
       "responseMode": null,
-      "type": "http"
+      "type": "http",
+      "streamingMode": null,
+      "streamingInterval": 0
     },
     {
       "uuid": "f98e58a2-e7d4-11ea-a5ec-979674ac1a4b",
@@ -5344,7 +5460,9 @@
         }
       ],
       "responseMode": null,
-      "type": "http"
+      "type": "http",
+      "streamingMode": null,
+      "streamingInterval": 0
     },
     {
       "uuid": "f98e58a7-e7d4-11ea-a5ec-979674ac1a4b",
@@ -5430,7 +5548,9 @@
         }
       ],
       "responseMode": null,
-      "type": "http"
+      "type": "http",
+      "streamingMode": null,
+      "streamingInterval": 0
     },
     {
       "uuid": "f98e7f93-e7d4-11ea-a5ec-979674ac1a4b",
@@ -5516,7 +5636,9 @@
         }
       ],
       "responseMode": null,
-      "type": "http"
+      "type": "http",
+      "streamingMode": null,
+      "streamingInterval": 0
     },
     {
       "uuid": "f98e7f98-e7d4-11ea-a5ec-979674ac1a4b",
@@ -5602,7 +5724,9 @@
         }
       ],
       "responseMode": null,
-      "type": "http"
+      "type": "http",
+      "streamingMode": null,
+      "streamingInterval": 0
     },
     {
       "uuid": "f98e7f9d-e7d4-11ea-a5ec-979674ac1a4b",
@@ -5688,7 +5812,9 @@
         }
       ],
       "responseMode": null,
-      "type": "http"
+      "type": "http",
+      "streamingMode": null,
+      "streamingInterval": 0
     },
     {
       "uuid": "f98e7fa3-e7d4-11ea-a5ec-979674ac1a4b",
@@ -5793,7 +5919,9 @@
         }
       ],
       "responseMode": null,
-      "type": "http"
+      "type": "http",
+      "streamingMode": null,
+      "streamingInterval": 0
     },
     {
       "uuid": "f98e7fa9-e7d4-11ea-a5ec-979674ac1a4b",
@@ -5898,7 +6026,9 @@
         }
       ],
       "responseMode": null,
-      "type": "http"
+      "type": "http",
+      "streamingMode": null,
+      "streamingInterval": 0
     },
     {
       "uuid": "f98e7fae-e7d4-11ea-a5ec-979674ac1a4b",
@@ -5984,7 +6114,9 @@
         }
       ],
       "responseMode": null,
-      "type": "http"
+      "type": "http",
+      "streamingMode": null,
+      "streamingInterval": 0
     },
     {
       "uuid": "f98e7fb4-e7d4-11ea-a5ec-979674ac1a4b",
@@ -6089,7 +6221,9 @@
         }
       ],
       "responseMode": null,
-      "type": "http"
+      "type": "http",
+      "streamingMode": null,
+      "streamingInterval": 0
     },
     {
       "uuid": "f98e7fba-e7d4-11ea-a5ec-979674ac1a4b",
@@ -6194,7 +6328,9 @@
         }
       ],
       "responseMode": null,
-      "type": "http"
+      "type": "http",
+      "streamingMode": null,
+      "streamingInterval": 0
     },
     {
       "uuid": "f98e7fbf-e7d4-11ea-a5ec-979674ac1a4b",
@@ -6280,7 +6416,9 @@
         }
       ],
       "responseMode": null,
-      "type": "http"
+      "type": "http",
+      "streamingMode": null,
+      "streamingInterval": 0
     },
     {
       "uuid": "f98e7fc5-e7d4-11ea-a5ec-979674ac1a4b",
@@ -6385,7 +6523,9 @@
         }
       ],
       "responseMode": null,
-      "type": "http"
+      "type": "http",
+      "streamingMode": null,
+      "streamingInterval": 0
     },
     {
       "uuid": "f98e7fca-e7d4-11ea-a5ec-979674ac1a4b",
@@ -6471,7 +6611,9 @@
         }
       ],
       "responseMode": null,
-      "type": "http"
+      "type": "http",
+      "streamingMode": null,
+      "streamingInterval": 0
     },
     {
       "uuid": "f98e7fcf-e7d4-11ea-a5ec-979674ac1a4b",
@@ -6557,7 +6699,9 @@
         }
       ],
       "responseMode": null,
-      "type": "http"
+      "type": "http",
+      "streamingMode": null,
+      "streamingInterval": 0
     },
     {
       "uuid": "f98e7fd4-e7d4-11ea-a5ec-979674ac1a4b",
@@ -6643,7 +6787,9 @@
         }
       ],
       "responseMode": null,
-      "type": "http"
+      "type": "http",
+      "streamingMode": null,
+      "streamingInterval": 0
     },
     {
       "uuid": "f98ea6a4-e7d4-11ea-a5ec-979674ac1a4b",
@@ -6748,7 +6894,9 @@
         }
       ],
       "responseMode": null,
-      "type": "http"
+      "type": "http",
+      "streamingMode": null,
+      "streamingInterval": 0
     },
     {
       "uuid": "f98ea6a6-e7d4-11ea-a5ec-979674ac1a4b",
@@ -6777,7 +6925,9 @@
         }
       ],
       "responseMode": null,
-      "type": "http"
+      "type": "http",
+      "streamingMode": null,
+      "streamingInterval": 0
     },
     {
       "uuid": "f98ea6ac-e7d4-11ea-a5ec-979674ac1a4b",
@@ -6882,7 +7032,9 @@
         }
       ],
       "responseMode": null,
-      "type": "http"
+      "type": "http",
+      "streamingMode": null,
+      "streamingInterval": 0
     },
     {
       "uuid": "f98ea6b1-e7d4-11ea-a5ec-979674ac1a4b",
@@ -6968,7 +7120,9 @@
         }
       ],
       "responseMode": null,
-      "type": "http"
+      "type": "http",
+      "streamingMode": null,
+      "streamingInterval": 0
     }
   ],
   "proxyMode": false,
