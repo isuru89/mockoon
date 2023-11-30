@@ -66,7 +66,7 @@ import {
 } from '../utils';
 import { WebSocketResponseRulesInterpreter } from '../ws-response-rules-interpreter';
 import { CrudRouteIds, crudRoutesBuilder, databucketActions } from './crud';
-import { isWebSocketOpen } from './ws';
+import { isWebSocketOpen, serveFileContentInWs } from './ws';
 
 /**
  * Create a server instance from an Environment object.
@@ -602,20 +602,24 @@ export class MockoonServer extends (EventEmitter as new () => TypedEmitter<Serve
 
         setTimeout(() => {
           const content = this.deriveFinalResponseContentForWebSockets(
+            socket,
+            route,
             enabledRouteResponse,
             request,
             data
           );
 
-          socket.send(content || '', (err) => {
-            if (err) {
-              this.emit('error', ServerErrorCodes.WS_SERVING_ERROR, err, {
-                ...baseErrorMeta,
-                selectedResponseUUID: enabledRouteResponse.uuid,
-                selectedResponseLabel: enabledRouteResponse.label
-              });
-            }
-          });
+          if (content) {
+            socket.send(content || '', (err) => {
+              if (err) {
+                this.emit('error', ServerErrorCodes.WS_SERVING_ERROR, err, {
+                  ...baseErrorMeta,
+                  selectedResponseUUID: enabledRouteResponse.uuid,
+                  selectedResponseLabel: enabledRouteResponse.label
+                });
+              }
+            });
+          }
         }, enabledRouteResponse.latency);
       });
     };
@@ -624,16 +628,23 @@ export class MockoonServer extends (EventEmitter as new () => TypedEmitter<Serve
   /**
    * Derive final delivery content for websocket response.
    *
+   * If no content is returned, that means the relevant content has been served,
+   * or a failure has occurred. These scenarios can happen with file body type
+   * and should be handled properly by the callers.
+   *
+   * @param socket
+   * @param route
    * @param enabledRouteResponse
    * @param request
    * @param data
-   * @returns
    */
   private deriveFinalResponseContentForWebSockets(
+    socket: WebSocket,
+    route: Route,
     enabledRouteResponse: RouteResponse,
     request: IncomingMessage,
     data?: RawData
-  ) {
+  ): string | undefined {
     let content: any = enabledRouteResponse.body;
 
     if (
@@ -659,6 +670,33 @@ export class MockoonServer extends (EventEmitter as new () => TypedEmitter<Serve
           content = content;
         }
       }
+    } else if (
+      enabledRouteResponse.bodyType === BodyTypes.FILE &&
+      enabledRouteResponse.filePath
+    ) {
+      const templateParser = (contentData: string) =>
+        TemplateParser(
+          false,
+          contentData,
+          this.environment,
+          this.processedDatabuckets,
+          undefined,
+          undefined,
+          {
+            request,
+            message: data
+          }
+        );
+
+      serveFileContentInWs(
+        socket,
+        route,
+        enabledRouteResponse,
+        this,
+        templateParser
+      );
+
+      return;
     }
 
     if (!enabledRouteResponse.disableTemplating) {
@@ -712,11 +750,17 @@ export class MockoonServer extends (EventEmitter as new () => TypedEmitter<Serve
 
       const content =
         this.deriveFinalResponseContentForWebSockets(
+          socket,
+          route,
           enabledRouteResponse,
           request
         ) || '';
 
       responseNumber += 1;
+
+      if (!content) {
+        return;
+      }
 
       const errorMetaData = {
         ...baseErrorMeta,
