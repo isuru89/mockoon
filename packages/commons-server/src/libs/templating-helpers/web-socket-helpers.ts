@@ -4,7 +4,6 @@ import { IncomingMessage } from 'http';
 import { JSONPath } from 'jsonpath-plus';
 import { get as objectGet } from 'object-path';
 import { parse as parseUrl } from 'url';
-import { RawData } from 'ws';
 import { xml2js } from 'xml-js';
 import { ParsedXMLBodyMimeTypes } from '../../constants/common.constants';
 import { convertPathToArray, stringIncludesArrayItems } from '../utils';
@@ -20,17 +19,6 @@ export const requestHelperNames: (keyof ReturnType<typeof WebSocketHelpers>)[] =
     'header',
     'baseUrl'
   ];
-
-export const getRawWebSocketBodyAsString = (message?: RawData): string => {
-  if (!message) {
-    return '';
-  }
-  if (Array.isArray(message)) {
-    return Buffer.concat(message).toString('utf8');
-  }
-
-  return message.toString('utf8');
-};
 
 export const parseWebSocketMessage = (
   request: IncomingMessage,
@@ -50,13 +38,13 @@ export const parseWebSocketMessage = (
 
 export const WebSocketHelpers = function (
   request: IncomingMessage,
-  messageData?: RawData,
+  messageData?: string,
   environment?: Environment
 ) {
   const location = parseUrl(request.url || '', true);
 
   // for simplicity, we suppport only json, xml or raw types only.
-  const rawMessageBody = getRawWebSocketBodyAsString(messageData);
+  const rawMessageBody = messageData || '';
   const message = parseWebSocketMessage(request, rawMessageBody);
 
   return {

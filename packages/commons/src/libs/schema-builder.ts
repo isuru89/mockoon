@@ -142,8 +142,9 @@ export const BuildWebSocketRoute = (
   const defaultResponse = {
     ...BuildRouteResponse(),
     default: true,
-    body: options.body
-  };
+    body: options.body,
+    sendFileAsBody: true
+  } as RouteResponse;
 
   return {
     ...RouteDefault,

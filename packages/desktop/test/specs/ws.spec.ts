@@ -1,5 +1,7 @@
 import assert = require('assert');
+import { promises as fs } from 'fs';
 import environments from '../libs/environments';
+import http from '../libs/http';
 import { WsConnection, withTimeout } from '../libs/ws';
 
 describe('WebSockets', () => {
@@ -7,6 +9,19 @@ describe('WebSockets', () => {
     // open env
     await environments.open('ws');
     await environments.start();
+  });
+
+  describe('Http and WebSocket mixed', () => {
+    it('should work http routes as usual among websocket routes', async () => {
+      await http.assertCall({
+        method: 'GET',
+        path: '/test/http',
+        testedResponse: {
+          status: 200,
+          body: 'This is a http response'
+        }
+      });
+    });
   });
 
   describe('One-to-one websocket', () => {
@@ -63,13 +78,18 @@ describe('WebSockets', () => {
 
     it('should return correct response for each message', async () => {
       // conversational type ws
+      await fs.copyFile(
+        './test/data/res/file-templating.txt',
+        './tmp/storage/file-templating.txt'
+      );
+
       const ws = new WsConnection(3000, '/test/ws/converse');
       await ws.openForConversation({
         'Content-Type': 'application/json'
       });
       ws.assertWebsocketIsOpened();
 
-      await ws.assertReply('{ "test": "2" }', 'Response when given 2');
+      await ws.assertReply('{ "test": "2" }', 'start2end');
       await ws.assertReply('{ "test": "1" }', 'Response when given 1');
       await ws.assertReply('{ "test": "0" }', 'Response otherwise');
       await ws.assertReply('{ }', 'Response otherwise');
@@ -107,6 +127,7 @@ describe('WebSockets', () => {
       await browser.pause(1600);
 
       const msgs = ws.drainAllMessages();
+      expect(msgs.length).toBeGreaterThan(0);
       const expected = [...Array(msgs.length)].map(
         (_, i) => `Bucket ${(i % 3) + 1} data`
       );
@@ -124,6 +145,8 @@ describe('WebSockets', () => {
       await browser.pause(1600);
 
       const msgs = ws.drainAllMessages();
+      ws.assertWebsocketIsOpened();
+      expect(msgs.length).toBeGreaterThan(0);
       const expected = [...Array(msgs.length)].map(() => 'Bucket 1 data');
       expect(msgs).toEqual(expected);
 

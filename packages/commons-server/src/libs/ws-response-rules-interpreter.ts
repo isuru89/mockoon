@@ -11,12 +11,8 @@ import { IncomingMessage } from 'http';
 import { JSONPath } from 'jsonpath-plus';
 import { get as objectPathGet } from 'object-path';
 import { parse as parseUrl } from 'url';
-import { RawData } from 'ws';
 import { TemplateParser } from './template-parser';
-import {
-  getRawWebSocketBodyAsString,
-  parseWebSocketMessage
-} from './templating-helpers/web-socket-helpers';
+import { parseWebSocketMessage } from './templating-helpers/web-socket-helpers';
 import { convertPathToArray } from './utils';
 
 /**
@@ -53,7 +49,7 @@ export class WebSocketResponseRulesInterpreter {
    */
   public chooseResponse(
     requestNumber: number,
-    message?: RawData
+    message?: string
   ): RouteResponse | null {
     // if no rules were fulfilled find the default one, or first one if no default
     const defaultResponse =
@@ -109,11 +105,7 @@ export class WebSocketResponseRulesInterpreter {
    * @param requestNumber
    * @returns
    */
-  private isValid(
-    rule: ResponseRule,
-    requestNumber: number,
-    message?: RawData
-  ) {
+  private isValid(rule: ResponseRule, requestNumber: number, message?: string) {
     let isValid = this.isValidRule(rule, requestNumber, message);
 
     if (rule.invert) {
@@ -129,7 +121,7 @@ export class WebSocketResponseRulesInterpreter {
   private isValidRule = (
     rule: ResponseRule,
     requestNumber: number,
-    message?: RawData
+    message?: string
   ): boolean => {
     if (!rule.target) {
       return false;
@@ -144,7 +136,7 @@ export class WebSocketResponseRulesInterpreter {
     if (rule.target === 'header') {
       value = this.request.headers[rule.modifier];
     } else {
-      const rawMessageBody = getRawWebSocketBodyAsString(message);
+      const rawMessageBody = message || '';
       const body = parseWebSocketMessage(this.request, rawMessageBody);
 
       if (rule.modifier) {
@@ -231,7 +223,7 @@ export class WebSocketResponseRulesInterpreter {
    * @param value the value to parse
    * @returns the parsed value or the unparsed input value if parsing fails
    */
-  private parseValue(value: string, message?: RawData): string {
+  private parseValue(value: string, message?: string): string {
     let parsedValue: string;
     try {
       parsedValue = TemplateParser(

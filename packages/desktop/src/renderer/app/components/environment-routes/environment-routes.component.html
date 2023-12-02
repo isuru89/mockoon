@@ -581,11 +581,7 @@
                   prefix="body-type"
                   formControlName="bodyType"
                   label="Body"
-                  [items]="
-                    activeRoute.type === 'ws'
-                      ? bodyTypesForWebSockets
-                      : bodyType
-                  "
+                  [items]="bodyType"
                   [uncheckable]="false"
                 ></app-toggle>
               </div>
@@ -655,7 +651,10 @@
                 </div>
 
                 <div
-                  *ngIf="data.activeRouteResponse?.filePath"
+                  *ngIf="
+                    data.activeRouteResponse?.filePath &&
+                    activeRoute.type !== 'ws'
+                  "
                   class="d-flex justify-content-between mt-2 px-2"
                 >
                   <div class="form-check">

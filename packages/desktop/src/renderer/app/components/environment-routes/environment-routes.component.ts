@@ -221,16 +221,6 @@ export class EnvironmentRoutesComponent implements OnInit, OnDestroy {
       label: 'Data'
     }
   ];
-  public bodyTypesForWebSockets = [
-    {
-      value: 'INLINE',
-      label: 'Inline'
-    },
-    {
-      value: 'DATABUCKET',
-      label: 'Data'
-    }
-  ];
   public window = window;
   public rulesDisablingResponseModes: ResponseMode[] =
     RulesDisablingResponseModes;

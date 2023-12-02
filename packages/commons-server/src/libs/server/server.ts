@@ -46,7 +46,7 @@ import { SecureContextOptions } from 'tls';
 import TypedEmitter from 'typed-emitter';
 import { parse as parseUrl } from 'url';
 import { format } from 'util';
-import { RawData, WebSocket, WebSocketServer } from 'ws';
+import { WebSocket, WebSocketServer } from 'ws';
 import { xml2js } from 'xml-js';
 import { ParsedXMLBodyMimeTypes } from '../../constants/common.constants';
 import { ServerMessages } from '../../constants/server-messages.constants';
@@ -66,7 +66,7 @@ import {
 } from '../utils';
 import { WebSocketResponseRulesInterpreter } from '../ws-response-rules-interpreter';
 import { CrudRouteIds, crudRoutesBuilder, databucketActions } from './crud';
-import { isWebSocketOpen, serveFileContentInWs } from './ws';
+import { isWebSocketOpen, messageToString, serveFileContentInWs } from './ws';
 
 /**
  * Create a server instance from an Environment object.
@@ -585,13 +585,16 @@ export class MockoonServer extends (EventEmitter as new () => TypedEmitter<Serve
           return;
         }
 
+        // get the incoming message as string...
+        const messageData = messageToString(data);
+
         const enabledRouteResponse = new WebSocketResponseRulesInterpreter(
           route.responses,
           request,
           route.responseMode,
           this.environment,
           this.processedDatabuckets
-        ).chooseResponse(responseNumber, data);
+        ).chooseResponse(responseNumber, messageData);
 
         if (!enabledRouteResponse) {
           // Do nothing?
@@ -606,7 +609,7 @@ export class MockoonServer extends (EventEmitter as new () => TypedEmitter<Serve
             route,
             enabledRouteResponse,
             request,
-            data
+            messageData
           );
 
           if (content) {
@@ -643,7 +646,7 @@ export class MockoonServer extends (EventEmitter as new () => TypedEmitter<Serve
     route: Route,
     enabledRouteResponse: RouteResponse,
     request: IncomingMessage,
-    data?: RawData
+    data?: string
   ): string | undefined {
     let content: any = enabledRouteResponse.body;
 
@@ -688,11 +691,21 @@ export class MockoonServer extends (EventEmitter as new () => TypedEmitter<Serve
           }
         );
 
+      // resolve file location
+      let filePath = templateParser(
+        enabledRouteResponse.filePath.replace(/\\/g, '/')
+      );
+      filePath = resolvePathFromEnvironment(
+        filePath,
+        this.options.environmentDirectory
+      );
+
       serveFileContentInWs(
         socket,
         route,
         enabledRouteResponse,
         this,
+        filePath,
         templateParser
       );
 
@@ -784,6 +797,13 @@ export class MockoonServer extends (EventEmitter as new () => TypedEmitter<Serve
     return intervalRef;
   }
 
+  /**
+   * Sends given response data to the socket client.
+   *
+   * @param client
+   * @param content
+   * @param errorMetaData
+   */
   private serveWsResponse(
     client: WebSocket,
     content: string,

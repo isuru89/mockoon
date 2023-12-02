@@ -139,8 +139,8 @@
           "statusCode": 200,
           "label": "Reponse 2",
           "headers": [],
-          "filePath": "",
-          "sendFileAsBody": false,
+          "filePath": "./file-templating.txt",
+          "sendFileAsBody": true,
           "rules": [
             {
               "target": "body",
@@ -155,7 +155,7 @@
           "fallbackTo404": false,
           "default": false,
           "databucketID": "",
-          "bodyType": "INLINE",
+          "bodyType": "FILE",
           "crudKey": "id",
           "callbacks": []
         },
@@ -352,14 +352,60 @@
       "type": "ws",
       "streamingMode": "BROADCAST",
       "streamingInterval": 250
+    },
+    {
+      "uuid": "bb6072b4-f4ae-44c6-ba70-f8fc86e8de08",
+      "type": "http",
+      "documentation": "HTTP route among lot of ws routes",
+      "method": "get",
+      "endpoint": "test/http",
+      "responses": [
+        {
+          "uuid": "7ba93ade-f2da-44d0-aa0f-4d248875dd73",
+          "body": "This is a http response",
+          "latency": 0,
+          "statusCode": 200,
+          "label": "",
+          "headers": [],
+          "bodyType": "INLINE",
+          "filePath": "",
+          "databucketID": "",
+          "sendFileAsBody": false,
+          "rules": [],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false,
+          "default": true,
+          "crudKey": "id",
+          "callbacks": []
+        }
+      ],
+      "responseMode": null,
+      "streamingMode": null,
+      "streamingInterval": 0
     }
   ],
   "proxyMode": false,
   "proxyHost": "",
   "cors": true,
-  "headers": [{ "key": "", "value": "" }],
-  "proxyReqHeaders": [{ "key": "", "value": "" }],
-  "proxyResHeaders": [{ "key": "", "value": "" }],
+  "headers": [
+    {
+      "key": "",
+      "value": ""
+    }
+  ],
+  "proxyReqHeaders": [
+    {
+      "key": "",
+      "value": ""
+    }
+  ],
+  "proxyResHeaders": [
+    {
+      "key": "",
+      "value": ""
+    }
+  ],
   "proxyRemovePrefix": false,
   "hostname": "",
   "tlsOptions": {
@@ -396,13 +442,38 @@
   ],
   "folders": [],
   "rootChildren": [
-    { "type": "route", "uuid": "06441476-6e46-4763-a8e7-0cc8377efb3a" },
-    { "type": "route", "uuid": "12c2e169-2211-4582-85bc-82caaa8e4390" },
-    { "type": "route", "uuid": "dd07b407-df1f-4393-83f2-7a832fdd6f99" },
-    { "type": "route", "uuid": "12ae91d2-23dc-4032-94a4-da62378b46fc" },
-    { "type": "route", "uuid": "ecf07191-3779-4b65-9922-abd3468d57ac" },
-    { "type": "route", "uuid": "2fc838f9-766f-41c7-95ce-dfbbf2c36a04" },
-    { "type": "route", "uuid": "a1d4f31f-d547-4edf-bc10-183bc6f29685" }
+    {
+      "type": "route",
+      "uuid": "06441476-6e46-4763-a8e7-0cc8377efb3a"
+    },
+    {
+      "type": "route",
+      "uuid": "12c2e169-2211-4582-85bc-82caaa8e4390"
+    },
+    {
+      "type": "route",
+      "uuid": "dd07b407-df1f-4393-83f2-7a832fdd6f99"
+    },
+    {
+      "type": "route",
+      "uuid": "12ae91d2-23dc-4032-94a4-da62378b46fc"
+    },
+    {
+      "type": "route",
+      "uuid": "ecf07191-3779-4b65-9922-abd3468d57ac"
+    },
+    {
+      "type": "route",
+      "uuid": "2fc838f9-766f-41c7-95ce-dfbbf2c36a04"
+    },
+    {
+      "type": "route",
+      "uuid": "a1d4f31f-d547-4edf-bc10-183bc6f29685"
+    },
+    {
+      "type": "route",
+      "uuid": "bb6072b4-f4ae-44c6-ba70-f8fc86e8de08"
+    }
   ],
   "callbacks": []
 }

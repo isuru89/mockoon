@@ -25,9 +25,10 @@ export class WsConnection {
     private path: string = ''
   ) {}
 
-  public async open(openWithData?: string) {
+  public async open(openWithData?: string, headers?: any) {
     return new Promise((resolve, reject) => {
       this.ws = new WebSocket(`ws://localhost:${this.port}${this.path}`, {
+        headers,
         handshakeTimeout: 5000
       });
 
