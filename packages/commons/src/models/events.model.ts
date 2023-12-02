@@ -1,5 +1,5 @@
 import { ServerErrorCodes } from '../enums/errors.enum';
-import { InvokedCallback, Transaction } from './server.model';
+import { InFlightRequest, InvokedCallback, Transaction } from './server.model';
 
 export type ServerEvents = {
   error: (
@@ -20,11 +20,11 @@ export type ServerEvents = {
   /**
    * Web socket related events
    */
-  'ws-new-connection': (websocketId: string) => void;
+  'ws-new-connection': (request: InFlightRequest) => void;
   'ws-closed': (
-    websocketId: string,
+    request: InFlightRequest,
     wsCode: number,
     reason?: string | null
   ) => void;
-  'ws-message-received': (websocketId: string) => void;
+  'ws-message-received': (request: InFlightRequest, message: string) => void;
 };

@@ -3,6 +3,7 @@ import {
   Folder,
   FolderChild,
   Header,
+  InFlightRequest,
   InvokedCallback,
   Methods,
   Route,
@@ -10,9 +11,13 @@ import {
 } from '@mockoon/commons';
 import { Request, Response } from 'express';
 import { SafeString } from 'handlebars';
-import { IncomingHttpHeaders, OutgoingHttpHeaders } from 'http';
+import {
+  IncomingHttpHeaders,
+  IncomingMessage,
+  OutgoingHttpHeaders
+} from 'http';
 import { isAbsolute, resolve } from 'path';
-import { URL } from 'url';
+import { URL, parse as parseUrl } from 'url';
 import { brotliDecompressSync, inflateSync, unzipSync } from 'zlib';
 
 /**
@@ -131,6 +136,42 @@ export function CreateCallbackInvocation(
     responseHeaders: Object.keys(resHeadersObj).map(
       (k) => ({ key: k, value: resHeadersObj[k] }) as Header
     )
+  };
+}
+
+/**
+ * Creates in-flight request object.
+ *
+ * @param requestId
+ * @param request
+ * @param route
+ */
+export function CreateInFlightRequest(
+  requestId: string,
+  request: IncomingMessage,
+  route: Route
+): InFlightRequest {
+  const parsedUrl = parseUrl(request.url || '', true);
+
+  return {
+    requestId,
+    routeUUID: route.uuid,
+    request: {
+      method: (request.method as keyof typeof Methods) || 'get',
+      urlPath: parsedUrl.pathname,
+      route: route.endpoint,
+      headers: TransformHeaders(request.headers).sort(AscSort),
+      body: request.body,
+      query: parsedUrl.search,
+      params: [], // we don't support params yet
+      queryParams: parsedUrl.query
+        ? Object.keys(parsedUrl.query).map((k) => ({
+            name: k,
+            value: parsedUrl.query[k]
+          }))
+        : []
+    },
+    completed: false
   };
 }
 

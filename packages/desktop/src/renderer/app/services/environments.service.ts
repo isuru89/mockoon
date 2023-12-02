@@ -71,6 +71,7 @@ import {
   CallbackUsage
 } from 'src/renderer/app/models/callback.model';
 import { DataSubject } from 'src/renderer/app/models/data.model';
+import { EnvironmentLog } from 'src/renderer/app/models/environment-logs.model';
 import { MessageCodes } from 'src/renderer/app/models/messages.model';
 import {
   EnvironmentLogsTabsNameType,
@@ -1565,6 +1566,7 @@ export class EnvironmentsService extends Logger {
       let routeResponse: RouteResponse;
       const prefix = targetEnvironment.endpointPrefix;
       let endpoint = log.url.slice(1); // Remove the initial slash '/'
+      const routeType = log.protocol === 'ws' ? RouteType.WS : RouteType.HTTP;
       if (prefix && endpoint.startsWith(prefix)) {
         endpoint = endpoint.slice(prefix.length + 1); // Remove the prefix and the slash
       }
@@ -1579,7 +1581,7 @@ export class EnvironmentsService extends Logger {
         environmentHasRoute(targetEnvironment, {
           endpoint,
           method: log.method,
-          type: RouteType.HTTP
+          type: routeType
         })
       ) {
         return;
@@ -1618,7 +1620,9 @@ export class EnvironmentsService extends Logger {
       }
 
       const newRoute: Route = {
-        ...BuildHTTPRoute(),
+        ...(routeType === RouteType.WS
+          ? BuildWebSocketRoute()
+          : BuildHTTPRoute()),
         method: log.method,
         endpoint,
         responses: [routeResponse]
@@ -1772,7 +1776,18 @@ export class EnvironmentsService extends Logger {
   public listenServerTransactions() {
     return this.eventsService.serverTransaction$.pipe(
       tap((data) => {
-        const formattedLog = this.dataService.formatLog(data.transaction);
+        let formattedLog: EnvironmentLog;
+        if (data.transaction) {
+          formattedLog = this.dataService.formatLog(data.transaction);
+        } else if (data.inflightRequest) {
+          formattedLog = this.dataService.formatLogFromInFlightRequest(
+            data.inflightRequest
+          );
+        }
+
+        if (!formattedLog) {
+          return;
+        }
 
         this.store.update(logRequestAction(data.environmentUUID, formattedLog));
 

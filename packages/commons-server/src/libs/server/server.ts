@@ -56,6 +56,7 @@ import { TemplateParser } from '../template-parser';
 import { requestHelperNames } from '../templating-helpers/request-helpers';
 import {
   CreateCallbackInvocation,
+  CreateInFlightRequest,
   CreateTransaction,
   dedupSlashes,
   isBodySupportingMethod,
@@ -525,7 +526,12 @@ export class MockoonServer extends (EventEmitter as new () => TypedEmitter<Serve
         routePath: route.endpoint
       };
 
-      this.emit('ws-new-connection', websocketId);
+      const inflightRequest = CreateInFlightRequest(
+        websocketId,
+        request,
+        route
+      );
+      this.emit('ws-new-connection', inflightRequest);
 
       let responseNumber = 1;
 
@@ -565,15 +571,13 @@ export class MockoonServer extends (EventEmitter as new () => TypedEmitter<Serve
 
         this.emit(
           'ws-closed',
-          websocketId,
+          inflightRequest,
           code,
           reason ? reason.toString('utf8') : null
         );
       });
 
       socket.on('message', (data, isBinary) => {
-        this.emit('ws-message-received', websocketId);
-
         if (isBinary) {
           this.emit(
             'error',
@@ -587,6 +591,7 @@ export class MockoonServer extends (EventEmitter as new () => TypedEmitter<Serve
 
         // get the incoming message as string...
         const messageData = messageToString(data);
+        this.emit('ws-message-received', inflightRequest, messageData);
 
         const enabledRouteResponse = new WebSocketResponseRulesInterpreter(
           route.responses,

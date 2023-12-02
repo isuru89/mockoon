@@ -2,6 +2,7 @@ import {
   Environment,
   Environments,
   FakerAvailableLocales,
+  InFlightRequest,
   ServerErrorCodes,
   ServerEvents,
   Transaction
@@ -111,6 +112,7 @@ export interface MainAPIModel {
         errorCode?: ServerErrorCodes;
         originalError?: Error;
         transaction?: Transaction;
+        inflightRequest?: InFlightRequest;
       }
     ) => void
   ): void;

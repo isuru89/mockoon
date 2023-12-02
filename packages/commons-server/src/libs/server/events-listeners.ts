@@ -2,6 +2,7 @@ import {
   CloneObject,
   Environment,
   Header,
+  InFlightRequest,
   InvokedCallback,
   Methods,
   Transaction
@@ -148,23 +149,74 @@ export const listenServerEvents = function (
     logger.info('Callback invoked', logMeta);
   });
 
-  server.on('ws-new-connection', (websockerId) => {
-    logger.info('WebSocket New Connection', { ...defaultLogMeta, websockerId });
+  server.on('ws-new-connection', (inflightRequest: InFlightRequest) => {
+    const logMeta: { inflightRequest: InFlightRequest } = {
+      ...defaultLogMeta,
+      websocketId: inflightRequest.requestId,
+      url: inflightRequest.request.urlPath,
+      routeUUID: inflightRequest.routeUUID
+    };
+
+    if (logTransaction) {
+      logMeta.inflightRequest = CloneObject(inflightRequest) as InFlightRequest;
+      logMeta.inflightRequest.request.headers = logMeta.inflightRequest.request
+        ?.headers
+        ? logMeta.inflightRequest.request?.headers.map(
+            filterAuthorizationHeaders
+          )
+        : [];
+    }
+    logger.info('WebSocket New Connection', logMeta);
   });
 
-  server.on('ws-message-received', (websockerId) => {
-    logger.info('WebSocket Message Recieved', {
-      ...defaultLogMeta,
-      websockerId
-    });
-  });
+  server.on(
+    'ws-message-received',
+    (inflightRequest: InFlightRequest, message: string) => {
+      const logMeta: { inflightRequest: InFlightRequest; messageData: string } =
+        {
+          ...defaultLogMeta,
+          websocketId: inflightRequest.requestId,
+          url: inflightRequest.request.urlPath,
+          routeUUID: inflightRequest.routeUUID
+        };
 
-  server.on('ws-closed', (websockerId, code, reason) => {
-    logger.info('WebSocket Closed', {
-      ...defaultLogMeta,
-      websockerId,
-      code,
-      reason
-    });
-  });
+      if (logTransaction) {
+        logMeta.inflightRequest = CloneObject(
+          inflightRequest
+        ) as InFlightRequest;
+        logMeta.messageData = message;
+        logMeta.inflightRequest.request.headers = logMeta.inflightRequest
+          .request?.headers
+          ? logMeta.inflightRequest.request?.headers.map(
+              filterAuthorizationHeaders
+            )
+          : [];
+      }
+      logger.info('WebSocket Message Recieved', logMeta);
+    }
+  );
+
+  server.on(
+    'ws-closed',
+    (request: InFlightRequest, code: number, reason?: string | null) => {
+      const logMeta: { inflightRequest: InFlightRequest } = {
+        ...defaultLogMeta,
+        websocketId: request.requestId,
+        code,
+        reason
+      };
+
+      if (logTransaction) {
+        logMeta.inflightRequest = CloneObject(request) as InFlightRequest;
+        logMeta.inflightRequest.request.headers = logMeta.inflightRequest
+          .request?.headers
+          ? logMeta.inflightRequest.request?.headers.map(
+              filterAuthorizationHeaders
+            )
+          : [];
+      }
+
+      logger.info('WebSocket Closed', logMeta);
+    }
+  );
 };
