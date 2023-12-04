@@ -1,7 +1,9 @@
 import assert = require('assert');
 import { promises as fs } from 'fs';
 import environments from '../libs/environments';
+import environmentsSettings from '../libs/environments-settings';
 import http from '../libs/http';
+import navigation from '../libs/navigation';
 import { WsConnection, withTimeout } from '../libs/ws';
 
 describe('WebSockets', () => {
@@ -182,6 +184,51 @@ describe('WebSockets', () => {
 
       ws1.close();
       ws2.close();
+    });
+  });
+
+  describe('Secured WebSockets with TLS', () => {
+    before(async () => {
+      await fs.copyFile(
+        './test/data/res/domain.crt',
+        './tmp/storage/domain.crt'
+      );
+      await fs.copyFile(
+        './test/data/res/domain.key',
+        './tmp/storage/domain.key'
+      );
+    });
+
+    it('should add a custom certificate', async () => {
+      await navigation.switchView('ENV_SETTINGS');
+
+      await environmentsSettings.setSettingValue('certPath', './domain.crt');
+      await environmentsSettings.setSettingValue('keyPath', './domain.key');
+      await environmentsSettings.setSettingValue('passphrase', '123456');
+      // setting this causes an issue, but value is already set. So, we could ignore the error.
+      try {
+        await environmentsSettings.setSettingValue('enabled', 'true');
+      } catch (err) {}
+
+      await environments.restart();
+    });
+
+    it('should be able to connect to secured websocket', async () => {
+      const ws = new WsConnection(3000, '/test/ws/echo', 'wss');
+      await ws.openForConversation();
+      ws.assertWebsocketIsOpened();
+
+      await ws.assertReply(
+        '{ "message": "Hello world!" }',
+        'ECHO: { "message": "Hello world!" }'
+      );
+      await ws.assertReply(
+        '{ "message": "Hello world 2222!" }',
+        'ECHO: { "message": "Hello world 2222!" }'
+      );
+
+      ws.close();
+      ws.assertWebsocketIsClosed();
     });
   });
 

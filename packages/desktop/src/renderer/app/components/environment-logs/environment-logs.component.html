@@ -73,11 +73,11 @@
                       }} route-method"
                       >{{ log.method | uppercase }}</span
                     >
-                    <span
+                    <app-svg
                       *ngIf="log.protocol === 'ws'"
-                      class="badge badge-hollow ms-0 me-3 route-method"
-                      >{{ log.protocol | uppercase }}</span
-                    >
+                      icon="websocket"
+                      class="me-3"
+                    ></app-svg>
                   </div>
                   <div
                     class="route"
