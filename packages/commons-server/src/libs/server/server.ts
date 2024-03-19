@@ -584,7 +584,6 @@ export class MockoonServer extends (EventEmitter as new () => TypedEmitter<Serve
   ) {
     return (socket: WebSocket, request: IncomingMessage) => {
       // Refresh the environment when a new client is connected.
-      // Existing clients will not have this updated status.
       this.refreshEnvironment();
       const route = this.getRefreshedRoute(routeFor);
 
@@ -670,14 +669,30 @@ export class MockoonServer extends (EventEmitter as new () => TypedEmitter<Serve
           return;
         }
 
+        // Refresh the environment when a new message is recieved.
+        this.refreshEnvironment();
+        const routeInMessage = this.getRefreshedRoute(route);
+
+        // the route is not found. Skip reacting.
+        if (!routeInMessage) {
+          this.emit(
+            'error',
+            ServerErrorCodes.WS_UNKNOWN_ROUTE,
+            null,
+            baseErrorMeta
+          );
+
+          return;
+        }
+
         // get the incoming message as string...
         const messageData = messageToString(data);
         this.emit('ws-message-received', inflightRequest, messageData);
 
         const enabledRouteResponse = new ResponseRulesInterpreter(
-          route.responses,
+          routeInMessage.responses,
           serverRequest,
-          route.responseMode,
+          routeInMessage.responseMode,
           this.environment,
           this.processedDatabuckets,
           this.globalVariables,
@@ -694,7 +709,7 @@ export class MockoonServer extends (EventEmitter as new () => TypedEmitter<Serve
         setTimeout(() => {
           const content = this.deriveFinalResponseContentForWebSockets(
             socket,
-            route,
+            routeInMessage,
             enabledRouteResponse,
             request,
             messageData

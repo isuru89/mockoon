@@ -196,7 +196,7 @@ export class EnvironmentRoutesComponent implements OnInit, OnDestroy {
     }
   ];
   // disables fallback mode for websockets.
-  public responseModesForWsStreaming: ToggleItems = this.responseModes.filter(
+  public responseModesForWs: ToggleItems = this.responseModes.filter(
     (m) => m.value !== ResponseMode.FALLBACK
   );
   public streamingModes: ToggleItems = [

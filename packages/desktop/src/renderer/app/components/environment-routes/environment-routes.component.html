@@ -103,7 +103,7 @@
                     : null
                 "
                 [appInputNumber]="{
-                  min: 0,
+                  min: 10,
                   max: Infinity,
                   canBeEmpty: false
                 }"
@@ -341,9 +341,7 @@
                 prefix="response-modes"
                 formControlName="responseMode"
                 [items]="
-                  activeRoute.type === 'ws' && activeRoute.streamingMode
-                    ? responseModesForWsStreaming
-                    : responseModes
+                  activeRoute.type === 'ws' ? responseModesForWs : responseModes
                 "
                 appTourStep="tour-route-response-modes"
               ></app-toggle>
@@ -441,6 +439,7 @@
                   class="nav-item"
                   *ngIf="
                     activeRoute.type === 'http' ||
+                    activeRoute.type === 'ws' ||
                     (activeRoute.type === 'crud' &&
                       !data.activeRouteResponse?.default)
                   "
@@ -808,7 +807,10 @@
                   ></app-svg>
                 </div>
               </div>
-              <div class="input-group align-items-center">
+              <div
+                class="input-group align-items-center"
+                *ngIf="activeRoute.type !== 'ws'"
+              >
                 <div class="form-check mb-0">
                   <input
                     type="checkbox"
