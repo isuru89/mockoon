@@ -3,6 +3,14 @@ import { BodyTypes, Header, Methods, Route } from './route.model';
 
 export type TLSOptionsType = 'PFX' | 'CERT';
 
+export type NetworkProxyMode = 'HTTP' | 'HTTPS' | 'SOCKS';
+
+export type NetworkProxy = {
+  mode: NetworkProxyMode;
+  host: string;
+  port: number;
+};
+
 export type DataBucket = {
   uuid: string;
   // unique short id to be used in templating helpers or rules
@@ -58,6 +66,7 @@ export type Environment = {
   folders: Folder[];
   routes: Route[];
   rootChildren: FolderChild[];
+  networkProxy?: NetworkProxy;
   proxyMode: boolean;
   proxyRemovePrefix: boolean;
   proxyHost: string;

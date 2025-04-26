@@ -4,7 +4,8 @@ import {
   Callback,
   DataBucket,
   Environment,
-  EnvironmentTLSOptions
+  EnvironmentTLSOptions,
+  NetworkProxy
 } from '../models/environment.model';
 import { Folder, FolderChild } from '../models/folder.model';
 import {
@@ -487,7 +488,8 @@ export const EnvironmentSchema = Joi.object<Environment, true>({
   callbacks: Joi.array()
     .items(CallbackSchema, Joi.any().strip())
     .failover(EnvironmentDefault.callbacks)
-    .required()
+    .required(),
+  networkProxy: Joi.object<NetworkProxy>()
 })
   .failover(EnvironmentDefault)
   .default(EnvironmentDefault)

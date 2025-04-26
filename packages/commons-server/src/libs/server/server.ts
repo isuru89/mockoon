@@ -36,6 +36,7 @@ import express, { Application, NextFunction, Request, Response } from 'express';
 import { createReadStream, readFile, readFileSync, statSync } from 'fs';
 import type { RequestListener } from 'http';
 import { createServer as httpCreateServer, Server as httpServer } from 'http';
+import { HttpProxyAgent } from 'http-proxy-agent';
 import { createProxyMiddleware } from 'http-proxy-middleware';
 import {
   createServer as httpsCreateServer,
@@ -1748,6 +1749,12 @@ export class MockoonServer extends (EventEmitter as new () => TypedEmitter<Serve
           target: this.environment.proxyHost,
           secure: false,
           changeOrigin: true,
+          // TODO add network proxy mode
+          agent: this.environment.networkProxy
+            ? new HttpProxyAgent(
+                `http://${this.environment.networkProxy.host}:${this.environment.networkProxy.port}`
+              )
+            : undefined,
           pathRewrite: (path) => {
             if (
               this.environment.proxyRemovePrefix === true &&
