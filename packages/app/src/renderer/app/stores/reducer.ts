@@ -1091,7 +1091,8 @@ export const environmentReducer = (
         'endpoint',
         'method',
         'streamingMode',
-        'streamingInterval'
+        'streamingInterval',
+        'aliveMode'
       ];
 
       newState = {

@@ -1,4 +1,5 @@
 import {
+  AliveMode,
   BINARY_BODY,
   BodyTypes,
   CORSHeaders,
@@ -73,6 +74,7 @@ import {
 } from '../utils';
 import { createAdminEndpoint } from './admin-api';
 import { CrudRouteIds, crudRoutesBuilder, databucketActions } from './crud';
+import { Sse } from './sse';
 import {
   BroadcastContext,
   DelegatedBroadcastHandler,
@@ -1088,7 +1090,12 @@ export class MockoonServer extends (EventEmitter as new () => TypedEmitter<Serve
     route: Route,
     routePath: string
   ) {
-    server[route.method](routePath, this.createRouteHandler(route));
+    server[route.method](
+      routePath,
+      route.aliveMode !== AliveMode.SSE
+        ? this.createRouteHandler(route)
+        : this.createSSERouteHandler(route)
+    );
   }
 
   /**
@@ -1110,6 +1117,219 @@ export class MockoonServer extends (EventEmitter as new () => TypedEmitter<Serve
         crudRoute.path,
         this.createRouteHandler(route, crudRoute.id)
       );
+    }
+  }
+
+  private createSSERouteHandler(route: Route) {
+    return (request: Request, response: Response, next: NextFunction) => {
+      this.generateRequestDatabuckets(route, this.environment, request);
+
+      const checkRouteExistance = () => {
+        // refresh environment data to get route changes that do not require a restart (headers, body, etc)
+        const currentRoute = this.getRefreshedRoute(route);
+
+        if (!currentRoute) {
+          this.emit('error', ServerErrorCodes.ROUTE_NO_LONGER_EXISTS, null, {
+            routePath: route.endpoint,
+            routeUUID: route.uuid
+          });
+
+          this.sendError(response, ServerMessages.ROUTE_NO_LONGER_EXISTS, 404);
+
+          return null;
+        }
+
+        return currentRoute;
+      };
+
+      let currentRoute = checkRouteExistance();
+
+      if (!currentRoute) {
+        return;
+      }
+
+      this.requestNumbers[route.uuid] += 1;
+
+      const enabledRouteResponse = new ResponseRulesInterpreter(
+        currentRoute.responses,
+        fromExpressRequest(request),
+        currentRoute.responseMode,
+        this.environment,
+        this.processedDatabuckets,
+        this.globalVariables,
+        this.options.envVarsPrefix
+      ).chooseResponse(this.requestNumbers[route.uuid]);
+
+      if (!enabledRouteResponse) {
+        return next();
+      }
+
+      this.requestNumbers[route.uuid] += 1;
+
+      // save route and response UUIDs for logs (only in desktop app)
+      if (route.uuid && enabledRouteResponse.uuid) {
+        response.routeUUID = route.uuid;
+        response.routeResponseUUID = enabledRouteResponse.uuid;
+      }
+
+      let templateParse = true;
+
+      // serve inline body as default
+      let content: any = enabledRouteResponse.body;
+      let parts: any[] | null = null;
+      const serverRequest = fromExpressRequest(request);
+
+      if (
+        enabledRouteResponse.bodyType === BodyTypes.FILE &&
+        enabledRouteResponse.filePath
+      ) {
+        templateParse = false;
+
+        parts = this.getFileLines(
+          route,
+          enabledRouteResponse,
+          serverRequest,
+          response
+        );
+
+        if (!parts) {
+          return;
+        }
+      } else if (
+        enabledRouteResponse.bodyType === BodyTypes.DATABUCKET &&
+        enabledRouteResponse.databucketID
+      ) {
+        templateParse = false;
+
+        const servedDatabucket = this.processedDatabuckets.find(
+          (processedDatabucket) =>
+            processedDatabucket.id === enabledRouteResponse.databucketID
+        );
+
+        if (servedDatabucket) {
+          content = servedDatabucket.value;
+
+          if (Array.isArray(content)) {
+            parts = content as any[];
+          } else if (
+            typeof content === 'object' ||
+            typeof content === 'boolean' ||
+            typeof content === 'number'
+          ) {
+            parts = JSON.stringify(content).split(/\r\n|\r|\n/);
+          } else if (typeof content === 'string') {
+            parts = (content as string).split(/\r\n|\r|\n/);
+          }
+        }
+      }
+
+      if (!enabledRouteResponse.disableTemplating && templateParse) {
+        content = TemplateParser({
+          shouldOmitDataHelper: false,
+          content: content || '',
+          environment: this.environment,
+          processedDatabuckets: this.processedDatabuckets,
+          globalVariables: this.globalVariables,
+          request: serverRequest,
+          response,
+          envVarsPrefix: this.options.envVarsPrefix
+        });
+
+        parts = (content as string).split(/\r\n|\r|\n/);
+      }
+
+      if (!parts) {
+        return;
+      }
+
+      const sse = new Sse();
+      sse.requestListener(request, response);
+
+      let currentPartIndex = 0;
+
+      const endResponse = (intRef: NodeJS.Timeout) => {
+        if (intRef) {
+          clearInterval(intRef);
+        }
+        sse.close();
+        response.end();
+      };
+
+      const intervalRef = setInterval(() => {
+        currentRoute = checkRouteExistance();
+        if (!currentRoute) {
+          endResponse(intervalRef);
+
+          return;
+        }
+
+        sse.send(parts[currentPartIndex]);
+
+        currentPartIndex++;
+
+        if (currentPartIndex >= parts.length) {
+          endResponse(intervalRef);
+        }
+
+        // do nothing
+      }, getSafeStreamingInterval(route.streamingInterval));
+
+      // close, if server instance closed before all responses returned
+      this.on('stopped', () => {
+        if (intervalRef) {
+          clearInterval(intervalRef);
+        }
+        sse.close();
+      });
+    };
+  }
+
+  private getFileLines(
+    route: Route,
+    enabledRouteResponse: RouteResponse,
+    serverRequest: ServerRequest,
+    response: Response
+  ): string[] | null {
+    try {
+      const filePath = this.getSafeFilePath(
+        enabledRouteResponse.filePath,
+        serverRequest
+      );
+
+      const fileMimeType = mimeTypeLookup(filePath) || '';
+
+      const data = readFileSync(filePath);
+      let fileContent: string;
+      if (
+        MimeTypesWithTemplating.includes(fileMimeType) &&
+        !enabledRouteResponse.disableTemplating
+      ) {
+        fileContent = TemplateParser({
+          shouldOmitDataHelper: false,
+          content: data.toString(),
+          environment: this.environment,
+          processedDatabuckets: this.processedDatabuckets,
+          globalVariables: this.globalVariables,
+          request: serverRequest,
+          response,
+          envVarsPrefix: this.options.envVarsPrefix
+        });
+      } else {
+        fileContent = data.toString();
+      }
+
+      return fileContent.split(/\r\n|\r|\n/);
+    } catch (error: any) {
+      this.emit('error', ServerErrorCodes.ROUTE_FILE_SERVING_ERROR, error, {
+        routePath: route.endpoint,
+        routeUUID: route.uuid
+      });
+      this.sendError(
+        response,
+        format(ServerMessages.ROUTE_FILE_SERVING_ERROR, error.message)
+      );
+
+      return null;
     }
   }
 
