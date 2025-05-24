@@ -114,6 +114,7 @@ export class SvgComponent {
     | 'websocket'
     | 'broadcast'
     | 'events'
+    | 'announce'
     | 'public'
     | string;
 }

@@ -8,6 +8,7 @@ import {
 } from '../models/environment.model';
 import { Folder, FolderChild } from '../models/folder.model';
 import {
+  AliveMode,
   BodyTypes,
   CallbackInvocation,
   Header,
@@ -73,7 +74,8 @@ export const RouteDefault: Route = {
   responses: [],
   responseMode: null,
   streamingMode: null,
-  streamingInterval: 0
+  streamingInterval: 0,
+  aliveMode: AliveMode.NONE
 };
 
 export const RouteResponseDefault: RouteResponse = {
@@ -423,6 +425,11 @@ export const RouteSchema = Joi.object<Route, true>({
   streamingInterval: Joi.number()
     .min(0)
     .failover(RouteDefault.streamingInterval)
+    .required(),
+  aliveMode: Joi.string()
+    .allow(null)
+    .valid(AliveMode.NONE, AliveMode.SSE)
+    .failover(RouteDefault.aliveMode)
     .required()
 });
 
