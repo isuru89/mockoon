@@ -93,6 +93,11 @@ export enum RouteType {
   WS = 'ws'
 }
 
+export enum AliveMode {
+  NONE = 'NONE',
+  SSE = 'SSE'
+}
+
 export type Route = {
   uuid: string;
   type: RouteType;
@@ -103,7 +108,10 @@ export type Route = {
   responseMode: ResponseMode | null;
   // used in websocket routes
   streamingMode: StreamingMode | null;
+  // used in both websockets and Http/SSE routes
   streamingInterval: number;
+  // used to identify Http/SSE routes
+  aliveMode: AliveMode | null;
 };
 
 export type Header = { key: string; value: string };

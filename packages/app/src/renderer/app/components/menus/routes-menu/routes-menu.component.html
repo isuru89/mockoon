@@ -264,6 +264,15 @@
                 }}
               </span>
 
+              @if (route.aliveMode === 'SSE') {
+                <app-svg
+                  class="color-method-ws me-2"
+                  icon="announce"
+                  size="14"
+                  ngbTooltip="SSE mode activated"
+                ></app-svg>
+              }
+
               @if (route.responseMode === ResponseMode.RANDOM) {
                 <app-svg
                   class="text-primary me-2"

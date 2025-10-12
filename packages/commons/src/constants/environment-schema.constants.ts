@@ -8,6 +8,7 @@ import {
 } from '../models/environment.model';
 import { Folder, FolderChild } from '../models/folder.model';
 import {
+  AliveMode,
   BodyTypes,
   CallbackInvocation,
   Header,
@@ -73,7 +74,8 @@ export const RouteDefault: Route = {
   responses: [],
   responseMode: null,
   streamingMode: null,
-  streamingInterval: 0
+  streamingInterval: 0,
+  aliveMode: AliveMode.NONE
 };
 
 export const RouteResponseDefault: RouteResponse = {
@@ -416,6 +418,68 @@ const CallbackInvocationSchemaBuilder = (fix: boolean) =>
     stripUnknown: true
   });
 
+// export const RouteSchema = Joi.object<Route, true>({
+//   uuid: UUIDSchema,
+//   type: Joi.string()
+//     .valid(RouteType.HTTP, RouteType.CRUD, RouteType.WS)
+//     .failover(RouteDefault.type)
+//     .required(),
+//   documentation: Joi.string()
+//     .allow('')
+//     .failover(RouteDefault.documentation)
+//     .required(),
+//   method: Joi.string()
+//     .allow('')
+//     .valid(
+//       Methods.all,
+//       Methods.get,
+//       Methods.post,
+//       Methods.put,
+//       Methods.patch,
+//       Methods.delete,
+//       Methods.head,
+//       Methods.options,
+//       Methods.propfind,
+//       Methods.proppatch,
+//       Methods.move,
+//       Methods.copy,
+//       Methods.mkcol,
+//       Methods.lock,
+//       Methods.unlock
+//     )
+//     .failover(RouteDefault.method)
+//     .required(),
+//   endpoint: Joi.string().allow('').failover(RouteDefault.endpoint).required(),
+//   responses: Joi.array()
+//     .items(RouteResponseSchema, Joi.any().strip())
+//     .failover(RouteDefault.responses)
+//     .required(),
+//   responseMode: Joi.string()
+//     .allow(null)
+//     .valid(
+//       ResponseMode.RANDOM,
+//       ResponseMode.SEQUENTIAL,
+//       ResponseMode.DISABLE_RULES,
+//       ResponseMode.FALLBACK
+//     )
+//     .failover(RouteDefault.responseMode)
+//     .required(),
+//   streamingMode: Joi.string()
+//     .allow(null)
+//     .valid(StreamingMode.UNICAST, StreamingMode.BROADCAST)
+//     .failover(RouteDefault.streamingMode)
+//     .required(),
+//   streamingInterval: Joi.number()
+//     .min(0)
+//     .failover(RouteDefault.streamingInterval)
+//     .required(),
+//   aliveMode: Joi.string()
+//     .allow(null)
+//     .valid(AliveMode.NONE, AliveMode.SSE)
+//     .failover(RouteDefault.aliveMode)
+//     .required()
+// });
+
 const RouteResponseSchemaBuilder = (fix: boolean) =>
   conditionalFailover(
     fix,
@@ -629,6 +693,15 @@ const RouteSchemaBuilder = (fix: boolean) =>
         fix,
         Joi.number().min(0).required(),
         RouteDefault.streamingInterval
+      ),
+      aliveMode: conditionalFailover(
+        fix,
+        Joi.string()
+          .allow(null)
+          .valid(AliveMode.NONE, AliveMode.SSE)
+          .failover(RouteDefault.aliveMode)
+          .required(),
+        RouteDefault.aliveMode
       )
     }).options({
       stripUnknown: true
