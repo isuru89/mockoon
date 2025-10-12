@@ -13,6 +13,7 @@ import {
 } from '@angular/forms';
 import { DeployInstance } from '@mockoon/cloud';
 import {
+  AliveMode,
   Environment,
   FileExtensionsWithTemplating,
   GetContentType,
@@ -162,6 +163,18 @@ export class EnvironmentRoutesComponent implements OnInit, OnDestroy {
   public scrollToBottom = this.uiService.scrollToBottom;
   public databuckets$: Observable<DropdownItems>;
   public externalLink$: Observable<string>;
+  public aliveModes: ToggleItems = [
+    {
+      value: AliveMode.NONE,
+      icon: 'endpoint',
+      tooltip: 'No Streaming'
+    },
+    {
+      value: AliveMode.SSE,
+      icon: 'announce',
+      tooltip: 'Event Stream (SSE)'
+    }
+  ];
   public methods: DropdownItems = [
     {
       value: Methods.all,
@@ -644,12 +657,14 @@ export class EnvironmentRoutesComponent implements OnInit, OnDestroy {
    */
   private initForms() {
     this.activeRouteForm = this.formBuilder.group({
+      type: [RouteDefault.type],
       documentation: [RouteDefault.documentation],
       method: [RouteDefault.method],
       endpoint: [RouteDefault.endpoint],
       responseMode: [RouteDefault.responseMode],
       streamingMode: [RouteDefault.streamingMode],
-      streamingInterval: [RouteDefault.streamingInterval]
+      streamingInterval: [RouteDefault.streamingInterval],
+      aliveMode: [RouteDefault.aliveMode]
     });
 
     this.defaultResponseTooltip$ = this.activeRouteForm
@@ -673,9 +688,16 @@ export class EnvironmentRoutesComponent implements OnInit, OnDestroy {
     // send new activeRouteForm values to the store, one by one
     merge(
       ...Object.keys(this.activeRouteForm.controls).map((controlName) =>
-        this.activeRouteForm
-          .get(controlName)
-          .valueChanges.pipe(map((newValue) => ({ [controlName]: newValue })))
+        this.activeRouteForm.get(controlName).valueChanges.pipe(
+          map((newValue) => {
+            // when aliveMode property changes, switch active tab to 'RESPONSE' tab.
+            if (controlName === 'aliveMode') {
+              this.setActiveTab('RESPONSE');
+            }
+
+            return { [controlName]: newValue };
+          })
+        )
       )
     )
       .pipe(
@@ -738,7 +760,8 @@ export class EnvironmentRoutesComponent implements OnInit, OnDestroy {
             endpoint: activeRoute.endpoint,
             responseMode: activeRoute.responseMode,
             streamingMode: activeRoute.streamingMode,
-            streamingInterval: activeRoute.streamingInterval
+            streamingInterval: activeRoute.streamingInterval,
+            aliveMode: activeRoute.aliveMode
           },
           { emitEvent: false }
         );

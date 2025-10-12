@@ -90,6 +90,60 @@
             />
           </div>
 
+          <!-- SSE Options -->
+          <div
+            *ngIf="
+              data.activeRoute &&
+              data.activeRoute.type === 'http' &&
+              data.activeRoute.method === 'get'
+            "
+            class="d-flex mt-2"
+          >
+            <app-toggle
+              prefix="alive-modes"
+              formControlName="aliveMode"
+              [items]="aliveModes"
+            ></app-toggle>
+            <div class="input-group">
+              <div
+                class="input-group-prepend"
+                ngbTooltip="Streaming interval (ms)"
+              >
+                <span class="input-group-text">
+                  <app-svg icon="access_time"></app-svg>
+                </span>
+              </div>
+              <input
+                type="number"
+                class="form-control"
+                [attr.disabled]="
+                  activeRouteForm.get(['type']).value === 'http' &&
+                  activeRouteForm.get(['method']).value === 'get' &&
+                  activeRouteForm.get(['aliveMode']).value !== 'SSE'
+                    ? true
+                    : null
+                "
+                [appInputNumber]="{
+                  min: 10,
+                  max: Infinity,
+                  canBeEmpty: false
+                }"
+                formControlName="streamingInterval"
+              />
+              <div
+                *ngIf="
+                  10 > (activeRouteForm.get(['streamingInterval']).value || 0)
+                "
+                class="warning-message ms-auto text-center ps-2 align-self-center"
+                id="disabled-rules-warning-message"
+                [ngbTooltip]="texts.MINIMUM_STREAMING_INTERVAL_WARNING"
+              >
+                <app-svg icon="warning" class="pe-1"></app-svg>
+              </div>
+            </div>
+          </div>
+
+          <!-- WS Options -->
           <div
             *ngIf="data.activeRoute && data.activeRoute.type === 'ws'"
             class="d-flex mt-2"
@@ -453,7 +507,8 @@
               <li
                 class="nav-item"
                 *ngIf="
-                  data.activeRoute?.type === 'http' ||
+                  (data.activeRoute?.type === 'http' &&
+                    data.activeRoute?.aliveMode !== 'SSE') ||
                   (data.activeRoute?.type === 'crud' &&
                     !data.activeRouteResponse?.default)
                 "
@@ -615,8 +670,10 @@
                     type="number"
                     class="form-control"
                     [attr.disabled]="
-                      data.activeRoute.type === 'ws' &&
-                      !!data.activeRoute.streamingMode
+                      (data.activeRoute.type === 'ws' &&
+                        !!data.activeRoute.streamingMode) ||
+                      (data.activeRoute.type === 'http' &&
+                        data.activeRoute.aliveMode === 'SSE')
                         ? true
                         : null
                     "
@@ -725,7 +782,10 @@
                     *ngIf="data.activeRouteResponse?.filePath"
                     class="d-flex justify-content-between mt-2 px-2"
                   >
-                    <div class="form-check">
+                    <div
+                      class="form-check"
+                      *ngIf="data.activeRoute?.aliveMode !== 'SSE'"
+                    >
                       <input
                         type="checkbox"
                         class="form-check-input"
